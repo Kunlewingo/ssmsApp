@@ -1,0 +1,72 @@
+<div class="layout">
+
+  <div class="sidebar">
+
+    <h2>SSMS PANEL</h2>
+
+    <a routerLink="/dashboard">Dashboard</a>
+
+    <a routerLink="/add-student">Add Student</a>
+
+  </div>
+
+  <div class="main-content">
+
+    <h1 class="page-title">View Students</h1>
+
+    <div class="table-container">
+
+      <table>
+
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Course</th>
+          <th>Date Registered</th>
+          <th>Actions</th>
+        </tr>
+
+        <tr *ngFor="let student of filteredStudents; let i = index">
+
+          <td>
+            <input [(ngModel)]="student.name">
+          </td>
+
+          <td>
+            <input [(ngModel)]="student.email">
+          </td>
+
+          <td>
+            <input [(ngModel)]="student.phone">
+          </td>
+
+          <td>
+            <input [(ngModel)]="student.course">
+          </td>
+
+          <td>
+            <input [(ngModel)]="student.dateRegistered">
+          </td>
+
+          <td>
+
+            <button class="btn btn-success" (click)="saveStudent(student)">
+    Save
+</button>
+
+            <button class="btn btn-danger" (click)="deleteStudent(i)">
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,51 @@
+<div class="results-container">
+
+  <h2>Add Result</h2>
+
+  <!-- FORM -->
+  <div class="result-form">
+
+    <input
+      type="text"
+      placeholder="Student Name"
+      [(ngModel)]="studentName"
+    />
+
+    <input
+      type="number"
+      placeholder="Score"
+      [(ngModel)]="score"
+    />
+
+    <button (click)="addResult()">
+      Add Result
+    </button>
+
+  </div>
+
+  <!-- RESULTS TABLE -->
+  <table border="1" width="100%">
+
+    <thead>
+      <tr>
+        <th>Student Name</th>
+        <th>Score</th>
+        <th>Grade</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let result of results">
+
+        <td>{{ result.studentName }}</td>
+        <td>{{ result.score }}</td>
+        <td>{{ result.grade }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>

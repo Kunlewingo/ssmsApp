@@ -1,0 +1,58 @@
+<div class="layout">
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <h2>SSMS PANEL</h2>
+
+    <h3>Students</h3>
+
+    <a routerLink="/add-student">Add Student</a>
+
+    <a routerLink="/view-student">View Students</a>
+
+    
+    <h3>Results</h3>
+
+    <a routerLink="/add-result">Add Result</a>
+
+    <a routerLink="/view-result">View Results</a>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <div class="main-content">
+
+    <h1 class="page-title">Dashboard</h1>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>Total Students</h3>
+        <p>{{ totalStudents }}</p>
+      </div>
+
+      <div class="card">
+        <h3>Total Courses</h3>
+        <p>{{ totalCourses }}</p>
+      </div>
+
+    </div>
+
+    <div class="activities">
+
+      <h2>Recent Activities</h2>
+
+      <ul>
+        <li *ngFor="let activity of recentActivities">
+          {{ activity }}
+        </li>
+      </ul>
+
+    </div>
+
+  </div>
+
+</div>

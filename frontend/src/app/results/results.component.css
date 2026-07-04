@@ -1,0 +1,153 @@
+/* =====================================
+   CLICKABLE STUDENT LINKS
+===================================== */
+.clickable {
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.clickable:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* =====================================
+   RESULT DETAILS PANEL
+===================================== */
+.details-box {
+  margin-top: 25px;
+  display: grid;
+  gap: 18px;
+}
+
+.details-box p {
+  background: #f8fafc;
+  padding: 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  border-left: 5px solid #2563eb;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+/* =====================================
+   GRADE BADGES
+===================================== */
+.grade {
+  padding: 8px 16px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+}
+
+/* Grade A */
+.grade-a {
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+}
+
+/* Grade B */
+.grade-b {
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+}
+
+/* Grade C */
+.grade-c {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+/* Grade D */
+.grade-d {
+  background: linear-gradient(90deg, #ea580c, #fb923c);
+}
+
+/* Grade F */
+.grade-f {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+}
+
+/* =====================================
+   RESPONSIVE TABLE
+===================================== */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+table {
+  min-width: 850px;
+}
+
+/* =====================================
+   TABLE ROW HOVER
+===================================== */
+tbody tr {
+  transition: 0.3s;
+}
+
+tbody tr:hover {
+  background: #f1f5f9;
+  transform: scale(1.01);
+}
+
+/* =====================================
+   PROFESSIONAL CARD DESIGN
+===================================== */
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  animation: fadeIn 0.4s ease;
+}
+
+/* =====================================
+   SMOOTH FADE-IN
+===================================== */
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =====================================
+   MOBILE RESPONSIVENESS
+===================================== */
+@media screen and (max-width: 768px) {
+
+  .results-page {
+    flex-direction: column;
+  }
+
+  .results-sidebar {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .results-content {
+    padding: 15px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  table {
+    min-width: 700px;
+  }
+
+  .details-box p {
+    font-size: 14px;
+  }
+}

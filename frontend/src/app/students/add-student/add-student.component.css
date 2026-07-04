@@ -1,0 +1,84 @@
+/* ==========================================================
+   ADD STUDENT COMPONENT
+   Uses the global styles defined in styles.css
+   ========================================================== */
+
+/* Add spacing below the page title */
+.page-title {
+  margin-bottom: 30px;
+}
+
+/* Keep the form centered */
+.form-card {
+  margin: 0 auto;
+}
+
+/* Slightly larger selects for consistency */
+.form-group select {
+  cursor: pointer;
+}
+
+/* Validation colours */
+.form-group input.ng-valid.ng-touched,
+.form-group select.ng-valid.ng-touched {
+  border-color: var(--success);
+}
+
+.form-group input.ng-invalid.ng-touched,
+.form-group select.ng-invalid.ng-touched {
+  border-color: var(--danger);
+}
+
+/* Required field indicator */
+.required {
+  color: var(--danger);
+  font-weight: bold;
+}
+
+/* Footer buttons */
+.form-footer {
+  margin-top: 10px;
+}
+
+/* Button spacing */
+.form-footer .btn {
+  min-width: 130px;
+}
+
+/* Better placeholder appearance */
+.form-group input::placeholder {
+  color: #9ca3af;
+}
+
+/* Better date picker cursor */
+input[type="date"] {
+  cursor: pointer;
+}
+
+/* Disabled dropdown appearance */
+select:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Smooth transitions */
+.form-group input,
+.form-group select,
+.btn {
+  transition: all 0.2s ease;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+
+  .form-footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .form-footer .btn {
+    width: 100%;
+  }
+
+}

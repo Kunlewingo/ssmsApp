@@ -1,0 +1,56 @@
+<div class="layout">
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <h2>SSMS PANEL</h2>
+
+    <a routerLink="/dashboard">Dashboard</a>
+
+    <a routerLink="/add-course">Add Course</a>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <div class="main-content">
+
+    <h1 class="page-title">View Courses</h1>
+
+    <div class="table-container">
+
+      <table>
+
+        <tr>
+          <th>#</th>
+          <th>Course Name</th>
+          <th>Action</th>
+        </tr>
+
+        <tr *ngFor="let course of courses; let i = index">
+
+          <td>{{ i + 1 }}</td>
+
+          <td>{{ course }}</td>
+
+          <td>
+
+            <button
+              class="btn btn-danger"
+              (click)="deleteCourse(i)"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

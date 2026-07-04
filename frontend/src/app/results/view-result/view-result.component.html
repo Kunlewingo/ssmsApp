@@ -1,0 +1,65 @@
+<div class="layout">
+
+  <!-- SIDEBAR -->
+
+  <div class="sidebar">
+
+    <h2>SSMS PANEL</h2>
+
+    <a routerLink="/dashboard">Dashboard</a>
+
+    <a routerLink="/add-result">Add Result</a>
+
+  </div>
+
+  <!-- MAIN CONTENT -->
+
+  <div class="main-content">
+
+    <h1 class="page-title">View Results</h1>
+
+    <div class="table-container">
+
+      <table>
+
+        <tr>
+          <th>#</th>
+          <th>Student</th>
+          <th>Course</th>
+          <th>Score</th>
+          <th>Grade</th>
+          <th>Action</th>
+        </tr>
+
+        <tr *ngFor="let result of results; let i = index">
+
+          <td>{{ i + 1 }}</td>
+
+          <td>{{ result.studentName }}</td>
+
+          <td>{{ result.course }}</td>
+
+          <td>{{ result.score }}</td>
+
+          <td>{{ result.grade }}</td>
+
+          <td>
+
+            <button
+              class="btn btn-danger"
+              (click)="deleteResult(i)"
+            >
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

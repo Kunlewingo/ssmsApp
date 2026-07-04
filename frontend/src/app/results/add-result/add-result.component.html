@@ -1,0 +1,162 @@
+<div class="layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+
+    <div class="sidebar-brand">
+      <h2>SSMS</h2>
+      <p>Student Management System</p>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <a routerLink="/dashboard" routerLinkActive="active">
+        🏠 Dashboard
+      </a>
+
+      <a routerLink="/add-student" routerLinkActive="active">
+        ➕ Add Student
+      </a>
+
+      <a routerLink="/view-student" routerLinkActive="active">
+        👨‍🎓 View Students
+      </a>
+
+      <a routerLink="/add-result" routerLinkActive="active">
+        📝 Add Result
+      </a>
+
+      <a routerLink="/view-result" routerLinkActive="active">
+        📊 View Results
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <div class="page-eyebrow">
+      EXAMINATION MANAGEMENT
+    </div>
+
+    <h1 class="page-title">
+      Add Student Result
+    </h1>
+
+    <div class="form-card">
+
+      <form (ngSubmit)="addResult()">
+
+        <div class="form-grid">
+
+          <!-- Student -->
+
+          <div class="form-group">
+
+            <label>Select Student</label>
+
+            <select
+              name="studentId"
+              [(ngModel)]="selectedStudentId"
+              (change)="onStudentChange()"
+              required>
+
+              <option [ngValue]="null">
+
+                Select Student
+
+              </option>
+
+              <option
+                *ngFor="let student of students"
+                [ngValue]="student.id">
+
+                {{ student.name }}
+
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- Faculty -->
+
+          <div class="form-group">
+
+            <label>Faculty</label>
+
+            <input
+              type="text"
+              name="faculty"
+              [(ngModel)]="result.faculty"
+              readonly>
+
+          </div>
+
+          <!-- Course -->
+
+          <div class="form-group">
+
+            <label>Course</label>
+
+            <input
+              type="text"
+              name="course"
+              [(ngModel)]="result.course"
+              readonly>
+
+          </div>
+
+          <!-- Score -->
+
+          <div class="form-group">
+
+            <label>Score</label>
+
+            <input
+              type="number"
+              name="score"
+              [(ngModel)]="result.score"
+              min="0"
+              max="100"
+              required>
+
+          </div>
+
+          <!-- Grade -->
+
+          <div class="form-group">
+
+            <label>Grade</label>
+
+            <input
+              type="text"
+              name="grade"
+              [value]="result.grade"
+              readonly>
+
+          </div>
+
+        </div>
+
+        <div class="form-footer">
+
+          <button
+            type="submit"
+            class="btn btn-primary">
+
+            Save Result
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </main>
+
+</div>

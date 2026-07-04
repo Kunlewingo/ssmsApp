@@ -1,0 +1,19 @@
+<div class="login-container">
+
+  <div class="login-box">
+
+    <h2>SSMS Admin Login</h2>
+
+    <input [(ngModel)]="username" placeholder="Username">
+
+    <input [(ngModel)]="password" type="password" placeholder="Password">
+
+    <button class="btn btn-primary" (click)="login()">
+      Login
+    </button>
+
+    <p class="error">{{ error }}</p>
+
+  </div>
+
+</div>

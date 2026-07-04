@@ -1,0 +1,16 @@
+.results-container {
+  padding: 20px;
+  overflow-x: auto;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 600px;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+}

@@ -1,0 +1,15 @@
+.results-container {
+  padding: 20px;
+  max-width: 500px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
