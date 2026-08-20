@@ -1,72 +1,57 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { StudentService } from '../../services/student.service';
+import { toUserMessage } from '../../shared/error-message.util';
 
 @Component({
   selector: 'app-view-student',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './view-student.component.html'
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './view-student.component.html',
+  styleUrls: ['./view-student.component.css']
 })
 export class ViewStudentComponent implements OnInit {
 
   students: any[] = [];
-  filteredStudents: any[] = [];
-  searchQuery = '';
+  searchTerm = '';
+  loadError = '';
+
+  constructor(private studentService: StudentService) {}
 
   ngOnInit(): void {
     this.loadStudents();
   }
 
   loadStudents(): void {
-    this.students = JSON.parse(localStorage.getItem('students') || '[]');
-    this.applyFilter();
+    this.studentService.getStudents().subscribe({
+      next: (data) => this.students = data,
+      error: (err) => this.loadError = toUserMessage(err, 'Couldn\'t load students. Please refresh.')
+    });
   }
 
-  applyFilter(): void {
-
-    const q = this.searchQuery.toLowerCase().trim();
-
-    if (!q) {
-      this.filteredStudents = [...this.students];
-      return;
-    }
-
-    this.filteredStudents = this.students.filter(student =>
-      student.name.toLowerCase().includes(q) ||
-      student.email.toLowerCase().includes(q) ||
-      student.course.toLowerCase().includes(q)
+  get filteredStudents(): any[] {
+    if (!this.searchTerm.trim()) return this.students;
+    const term = this.searchTerm.toLowerCase();
+    return this.students.filter(s =>
+      s.name.toLowerCase().includes(term) ||
+      s.email.toLowerCase().includes(term) ||
+      s.department?.name?.toLowerCase().includes(term)
     );
   }
 
-  saveStudent(student: any): void {
-
-    student.editing = false;
-
-    localStorage.setItem('students', JSON.stringify(this.students));
-
-    alert('Student updated successfully.');
-
-    this.loadStudents();
+  deleteStudent(id: string, event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    if (!confirm('Delete this student?')) return;
+    this.studentService.deleteStudent(id).subscribe({
+      next: () => this.loadStudents(),
+      error: (err) => this.loadError = toUserMessage(err, 'Couldn\'t delete this student. Please try again.')
+    });
   }
 
-  deleteStudent(index: number): void {
-
-    const student = this.filteredStudents[index];
-
-    const realIndex = this.students.indexOf(student);
-
-    if (realIndex > -1) {
-
-      this.students.splice(realIndex, 1);
-
-      localStorage.setItem('students', JSON.stringify(this.students));
-
-      this.loadStudents();
-
-      alert('Student deleted successfully.');
-    }
+  initials(name: string): string {
+    return name?.charAt(0)?.toUpperCase() || '?';
   }
-
 }

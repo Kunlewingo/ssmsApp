@@ -1,0 +1,54 @@
+/* ============================================
+   SSMS Design Tokens
+   Palette: navy/black (structure), blue (primary),
+   purple (accent/active), green (success), white (surface)
+   + coral, amber, cyan, pink for a livelier, more
+   colourful accent range across cards/badges/tags
+   ============================================ */
+:root {
+  color-scheme: light;
+
+  /* Core palette */
+  --navy: #0F172A;
+  --navy-light: #24314F;
+  --blue: #2563EB;
+  --blue-light: #60A5FA;
+  --purple: #8B2FE0;
+  --purple-light: #C084FC;
+  --green: #16A34A;
+  --green-light: #4ADE80;
+  --white: #FFFFFF;
+  --black: #0B0E14;
+
+  /* Extra accent colours for variety across badges, tags, icons */
+  --coral: #F43F5E;
+  --coral-light: #FDA4AF;
+  --amber: #F59E0B;
+  --amber-light: #FCD34D;
+  --cyan: #06B6D4;
+  --cyan-light: #67E8F9;
+  --pink: #EC4899;
+  --pink-light: #F9A8D4;
+
+  /* Surfaces & text */
+  --surface: #EEF3FF;
+  --surface-card: #FFFFFF;
+  --border: #C7D6F5;
+  --text-primary: #01050f;
+  --text-secondary: #00060e;
+  --text-inverse: #F8FAFC;
+
+  /* Signature gradients */
+  --gradient-accent: linear-gradient(135deg, var(--blue), var(--purple), var(--pink));
+  --gradient-success: linear-gradient(135deg, var(--green), var(--cyan));
+  --gradient-warm: linear-gradient(135deg, var(--coral), var(--amber));
+  --gradient-cool: linear-gradient(135deg, var(--blue), var(--cyan));
+  --gradient-sidebar: linear-gradient(180deg, #131C33 0%, #1B1440 100%);
+
+  /* Spacing / radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 8px 24px rgba(76, 29, 149, 0.14);
+}

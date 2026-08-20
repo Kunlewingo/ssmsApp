@@ -1,10 +1,18 @@
 const router = require('express').Router();
 const authController = require('../controllers/authController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// LOGIN ADMIN
+// ADMIN
 router.post('/login', authController.loginAdmin);
-
-// REGISTER ADMIN (optional but useful)
 router.post('/register', authController.registerAdmin);
+
+// STUDENT
+router.post('/student-login', authController.loginStudent);
+
+// CURRENT USER (admin or student) — frontend uses this instead of localStorage identity
+router.get('/me', authMiddleware, authController.getMe);
+
+// SELF-SERVICE PASSWORD CHANGE (used for forced first-login change too)
+router.post('/change-password', authMiddleware, authController.changePassword);
 
 module.exports = router;

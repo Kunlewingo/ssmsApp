@@ -4,12 +4,12 @@
 
     <h2>SSMS Admin Login</h2>
 
-    <input [(ngModel)]="username" placeholder="Username">
+    <input [(ngModel)]="email" type="email" placeholder="Email" name="email">
 
-    <input [(ngModel)]="password" type="password" placeholder="Password">
+    <input [(ngModel)]="password" type="password" placeholder="Password" name="password">
 
-    <button class="btn btn-primary" (click)="login()">
-      Login
+    <button class="btn btn-primary" (click)="login()" [disabled]="loading">
+      {{ loading ? 'Logging in...' : 'Login' }}
     </button>
 
     <p class="error">{{ error }}</p>

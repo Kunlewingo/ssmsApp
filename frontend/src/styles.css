@@ -10,8 +10,10 @@
 }
 
 :root {
-  --navy:       #0f1e3c;
-  --navy-light: #1e3a5f;
+  /* ---- Existing tokens (unchanged names — nothing that already
+     references these breaks) ---- */
+  --navy:       #0F172A; /* updated to match design-tokens.css navy */
+  --navy-light: #24314F; /* updated to match design-tokens.css navy-light */
   --teal:       #0ea5e9;
   --teal-dark:  #0284c7;
   --teal-dim:   rgba(14, 165, 233, 0.15);
@@ -35,6 +37,28 @@
   --shadow-md:  0 4px 20px rgba(0, 0, 0, 0.12);
   --sidebar-w:  260px;
   --transition: 0.2s ease;
+
+  /* ---- NEW: extended accent palette, matching design-tokens.css ---- */
+  --purple:       #8B2FE0;
+  --purple-light: #C084FC;
+  --purple-dim:   rgba(139, 47, 224, 0.15);
+  --coral:        #F43F5E;
+  --coral-light:  #FDA4AF;
+  --coral-dim:    rgba(244, 63, 94, 0.12);
+  --amber:        #F59E0B;
+  --amber-light:  #FCD34D;
+  --amber-dim:    rgba(245, 158, 11, 0.14);
+  --cyan:         #06B6D4;
+  --cyan-light:   #67E8F9;
+  --cyan-dim:     rgba(6, 182, 212, 0.12);
+  --pink:         #EC4899;
+  --pink-light:   #F9A8D4;
+  --pink-dim:     rgba(236, 72, 153, 0.12);
+
+  /* ---- NEW: gradients, matching design-tokens.css ---- */
+  --gradient-accent:  linear-gradient(135deg, var(--primary), var(--purple), var(--pink));
+  --gradient-sidebar: linear-gradient(180deg, #131C33 0%, #1B1440 100%);
+  --gradient-cool:    linear-gradient(135deg, var(--primary), var(--cyan));
 }
 
 html, body {
@@ -62,7 +86,7 @@ html, body {
 
 .sidebar {
   width: var(--sidebar-w);
-  background: var(--navy);
+  background: var(--gradient-sidebar); /* was flat var(--navy) */
   color: var(--white);
   padding: 28px 0;
   position: fixed;
@@ -137,9 +161,9 @@ html, body {
 
 .sidebar a.active,
 .sidebar-link.active {
-  background: var(--teal-dim);
-  color: #38bdf8;
-  border-left-color: var(--teal);
+  background: var(--purple-dim); /* was var(--teal-dim) */
+  color: var(--purple-light);     /* was #38bdf8 */
+  border-left-color: var(--purple); /* was var(--teal) */
 }
 
 /* ============================================================
@@ -255,7 +279,20 @@ html, body {
   justify-content: center;
   font-size: 20px;
   margin-bottom: 14px;
+  background: var(--teal-dim);
+  color: var(--teal-dark);
 }
+
+/* NEW: color variants — apply as e.g. class="card-icon blue" alongside
+   the base .card-icon class. Each pairs a light tint with dark-enough
+   text/icon color from the same family to keep contrast solid. */
+.card-icon.blue   { background: rgba(37, 99, 235, 0.12);  color: var(--primary-dk); }
+.card-icon.purple { background: var(--purple-dim);        color: #5B1FA0; }
+.card-icon.coral  { background: var(--coral-dim);         color: #B91C3C; }
+.card-icon.amber  { background: var(--amber-dim);         color: #92400E; }
+.card-icon.cyan   { background: var(--cyan-dim);          color: #0E7490; }
+.card-icon.pink   { background: var(--pink-dim);          color: #A3175E; }
+.card-icon.green  { background: rgba(22, 163, 74, 0.12);  color: var(--success-dk); }
 
 .card h3 {
   font-size: 12px;
@@ -410,6 +447,13 @@ html, body {
 }
 .btn-danger:hover { background: #fef2f2; }
 
+/* NEW: extra accent buttons, available anywhere */
+.btn-purple {
+  background: var(--purple);
+  color: var(--white);
+}
+.btn-purple:hover:not(:disabled) { background: #7423C7; }
+
 .btn-sm {
   padding: 6px 12px;
   font-size: 12px;
@@ -511,7 +555,7 @@ tbody tr {
 }
 
 tbody tr:last-child { border-bottom: none; }
-tbody tr:hover { background: #f0f9ff; }
+tbody tr:hover { background: var(--cyan-dim); } /* was hardcoded #f0f9ff */
 tbody tr.editing { background: rgba(14, 165, 233, 0.04); cursor: default; }
 tbody tr.editing:hover { background: rgba(14, 165, 233, 0.04); }
 
@@ -550,7 +594,19 @@ tbody td {
   padding: 3px 10px;
   border-radius: 20px;
   white-space: nowrap;
+  background: var(--bg);
+  color: var(--text-muted);
 }
+
+/* NEW: badge color variants — apply as class="badge green", etc. */
+.badge.blue   { background: rgba(37, 99, 235, 0.12);  color: var(--primary-dk); }
+.badge.purple { background: var(--purple-dim);        color: #5B1FA0; }
+.badge.coral  { background: var(--coral-dim);         color: #B91C3C; }
+.badge.amber  { background: var(--amber-dim);         color: #92400E; }
+.badge.cyan   { background: var(--cyan-dim);          color: #0E7490; }
+.badge.pink   { background: var(--pink-dim);          color: #A3175E; }
+.badge.green  { background: rgba(22, 163, 74, 0.12);  color: var(--success-dk); }
+.badge.red    { background: #fef2f2;                  color: var(--danger-dk); }
 
 .inline-input {
   width: 100%;

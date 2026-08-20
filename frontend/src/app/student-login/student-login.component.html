@@ -1,0 +1,19 @@
+<div class="login-container">
+
+  <div class="login-box">
+
+    <h2>SSMS Student Login</h2>
+
+    <input [(ngModel)]="email" type="email" placeholder="Email" name="email">
+
+    <input [(ngModel)]="password" type="password" placeholder="Password" name="password">
+
+    <button class="btn btn-primary" (click)="login()" [disabled]="loading">
+      {{ loading ? 'Logging in...' : 'Login' }}
+    </button>
+
+    <p class="error">{{ error }}</p>
+
+  </div>
+
+</div>

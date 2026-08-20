@@ -1,0 +1,40 @@
+<div class="overview-container">
+  <h2>Course Registrations Overview</h2>
+
+  <div class="feedback error" *ngIf="loadError">❌ {{ loadError }}</div>
+
+  <table class="results-table" *ngIf="registrations.length; else noRegs">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Department</th>
+        <th>Level</th>
+        <th>Session</th>
+        <th>Semester</th>
+        <th>Courses</th>
+        <th>Total Units</th>
+        <th>Session GPA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of registrations">
+        <td>{{ r.student?.name }}</td>
+        <td>{{ r.department?.name }}</td>
+        <td>{{ r.level }}L</td>
+        <td>{{ r.session }}</td>
+        <td>{{ r.semester === 'first' ? 'First' : 'Second' }}</td>
+        <td>
+          <span class="course-chip" *ngFor="let c of r.courses">
+            {{ c.course?.courseCode }}<span class="chip-type">({{ c.type }})</span>
+          </span>
+        </td>
+        <td>{{ r.totalUnits }}</td>
+        <td>{{ gpaByStudent[r.student?._id] ?? '—' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noRegs>
+    <p class="empty-state">No registrations yet.</p>
+  </ng-template>
+</div>

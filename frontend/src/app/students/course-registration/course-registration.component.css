@@ -1,0 +1,26 @@
+@import '../../shared/shared-controls.css';
+
+.registration-container { max-width: 760px; padding: 2.5rem; font-family: system-ui, sans-serif; }
+
+.step { margin-bottom: 1.5rem; }
+.step label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
+.step select, .session-input {
+  width: 100%; padding: 0.65rem; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+  font-size: 1rem; box-sizing: border-box;
+}
+.step select:focus, .session-input:focus { outline: none; border-color: var(--blue); }
+
+.semester-btn { flex: 1; min-width: 140px; }
+
+.unit-tracker { margin: 1.5rem 0; }
+.unit-bar { height: 10px; background: var(--border); border-radius: 999px; overflow: hidden; }
+.unit-fill { height: 100%; background: var(--gradient-success); transition: width 0.2s ease; }
+.unit-fill.over { background: #EF4444; }
+.unit-label { margin-top: 0.4rem; font-size: 0.9rem; font-weight: 600; }
+.warning { color: #DC2626; margin-left: 0.5rem; }
+
+.submit-btn {
+  width: 100%; padding: 0.9rem; background: var(--gradient-success); color: var(--white); border: none;
+  border-radius: var(--radius-sm); font-size: 1rem; font-weight: 700; cursor: pointer;
+}
+.submit-btn:disabled { background: #CBD5E1; cursor: not-allowed; }

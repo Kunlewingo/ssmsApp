@@ -1,0 +1,14 @@
+@import '../../shared/shared-controls.css';
+
+.management-container { max-width: 720px; padding: 2.5rem; font-family: system-ui, sans-serif; }
+
+.add-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+
+.dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+.dept-card {
+  display: flex; flex-direction: column; gap: 0.25rem; padding: 1rem;
+  border-radius: var(--radius-md); background: var(--white); border: 1.5px solid var(--border);
+  border-left: 4px solid var(--purple);
+}
+.dept-name { font-weight: 700; color: var(--text-primary); }
+.dept-meta { font-size: 0.8rem; color: var(--text-secondary); }

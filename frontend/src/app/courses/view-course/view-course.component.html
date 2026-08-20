@@ -1,56 +1,99 @@
-<div class="layout">
-
-  <!-- SIDEBAR -->
-
-  <div class="sidebar">
-
-    <h2>SSMS PANEL</h2>
-
-    <a routerLink="/dashboard">Dashboard</a>
-
-    <a routerLink="/add-course">Add Course</a>
-
+<div class="view-course-container">
+  <div class="header-row">
+    <h2>Courses</h2>
+    <a routerLink="/add-course" class="btn-primary add-link">+ Add Course</a>
   </div>
 
-  <!-- MAIN CONTENT -->
-
-  <div class="main-content">
-
-    <h1 class="page-title">View Courses</h1>
-
-    <div class="table-container">
-
-      <table>
-
-        <tr>
-          <th>#</th>
-          <th>Course Name</th>
-          <th>Action</th>
-        </tr>
-
-        <tr *ngFor="let course of courses; let i = index">
-
-          <td>{{ i + 1 }}</td>
-
-          <td>{{ course }}</td>
-
-          <td>
-
-            <button
-              class="btn btn-danger"
-              (click)="deleteCourse(i)"
-            >
-              Delete
-            </button>
-
-          </td>
-
-        </tr>
-
-      </table>
-
+  <div class="filter-bar">
+    <div class="filter-group">
+      <label>Department</label>
+      <select [(ngModel)]="selectedDepartmentId">
+        <option value="">All Departments</option>
+        <option *ngFor="let d of departments" [value]="d._id">{{ d.name }}</option>
+      </select>
     </div>
 
+    <div class="filter-group">
+      <label>Semester</label>
+      <div class="button-group">
+        <button type="button" class="pill-btn" [class.active]="selectedSemester === ''"
+          (click)="selectSemester('')">All</button>
+        <button type="button" class="pill-btn" [class.active]="selectedSemester === 'first'"
+          (click)="selectSemester('first')">First Semester</button>
+        <button type="button" class="pill-btn" [class.active]="selectedSemester === 'second'"
+          (click)="selectSemester('second')">Second Semester</button>
+      </div>
+    </div>
   </div>
 
+  <div class="feedback error" *ngIf="editError">❌ {{ editError }}</div>
+
+  <table class="results-table" *ngIf="filteredCourses.length; else noCourses">
+    <thead>
+      <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Level</th>
+        <th>Semester</th>
+        <th>Type</th>
+        <th>Units</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of filteredCourses">
+        <ng-container *ngIf="editingId === c._id; else readRow">
+          <td><input type="text" [(ngModel)]="editForm.courseCode" class="edit-input" /></td>
+          <td><input type="text" [(ngModel)]="editForm.courseName" class="edit-input" /></td>
+          <td>
+            <select [(ngModel)]="editForm.department" class="edit-input">
+              <option *ngFor="let d of departments" [value]="d._id">{{ d.name }}</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="editForm.level" class="edit-input">
+              <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl }}L</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="editForm.semester" class="edit-input">
+              <option value="first">First</option>
+              <option value="second">Second</option>
+            </select>
+          </td>
+          <td>
+            <select [(ngModel)]="editForm.type" class="edit-input">
+              <option value="compulsory">Compulsory</option>
+              <option value="elective">Elective</option>
+            </select>
+          </td>
+          <td><input type="number" min="1" [(ngModel)]="editForm.units" class="edit-input units-input" /></td>
+          <td class="actions-cell">
+            <button type="button" class="btn-primary btn-small" [disabled]="saving" (click)="saveEdit(c)">
+              {{ saving ? 'Saving...' : 'Save' }}
+            </button>
+            <button type="button" class="pill-btn btn-small" [disabled]="saving" (click)="cancelEdit()">Cancel</button>
+          </td>
+        </ng-container>
+
+        <ng-template #readRow>
+          <td>{{ c.courseCode }}</td>
+          <td>{{ c.courseName }}</td>
+          <td>{{ $any(c.department)?.name || c.department }}</td>
+          <td>{{ c.level }}L</td>
+          <td>{{ c.semester === 'first' ? 'First' : 'Second' }}</td>
+          <td>{{ c.type }}</td>
+          <td>{{ c.units }}</td>
+          <td class="actions-cell">
+            <button type="button" class="pill-btn btn-small" (click)="startEdit(c)">Edit</button>
+          </td>
+        </ng-template>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noCourses>
+    <p class="empty-state">No courses match this filter.</p>
+  </ng-template>
 </div>

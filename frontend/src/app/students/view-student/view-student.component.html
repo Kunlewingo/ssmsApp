@@ -1,72 +1,40 @@
-<div class="layout">
-
-  <div class="sidebar">
-
-    <h2>SSMS PANEL</h2>
-
-    <a routerLink="/dashboard">Dashboard</a>
-
-    <a routerLink="/add-student">Add Student</a>
-
-  </div>
-
-  <div class="main-content">
-
-    <h1 class="page-title">View Students</h1>
-
-    <div class="table-container">
-
-      <table>
-
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Course</th>
-          <th>Date Registered</th>
-          <th>Actions</th>
-        </tr>
-
-        <tr *ngFor="let student of filteredStudents; let i = index">
-
-          <td>
-            <input [(ngModel)]="student.name">
-          </td>
-
-          <td>
-            <input [(ngModel)]="student.email">
-          </td>
-
-          <td>
-            <input [(ngModel)]="student.phone">
-          </td>
-
-          <td>
-            <input [(ngModel)]="student.course">
-          </td>
-
-          <td>
-            <input [(ngModel)]="student.dateRegistered">
-          </td>
-
-          <td>
-
-            <button class="btn btn-success" (click)="saveStudent(student)">
-    Save
-</button>
-
-            <button class="btn btn-danger" (click)="deleteStudent(i)">
-              Delete
-            </button>
-
-          </td>
-
-        </tr>
-
-      </table>
-
+<div class="view-student-container">
+  <div class="header-row">
+    <h2>Students</h2>
+    <div class="header-actions">
+      <input
+        type="text"
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        placeholder="Search by name, email, or department...">
+      <a routerLink="/add-student" class="btn-primary add-link">+ Add Student</a>
     </div>
-
   </div>
 
+  <div class="feedback error" *ngIf="loadError">❌ {{ loadError }}</div>
+
+  <div class="student-grid" *ngIf="filteredStudents.length; else noStudents">
+    <a
+      class="student-card"
+      *ngFor="let s of filteredStudents"
+      [routerLink]="['/admin/students', s._id]">
+
+      <div class="avatar">{{ initials(s.name) }}</div>
+
+      <div class="student-details">
+        <span class="student-name">{{ s.name }}</span>
+        <span class="student-email">{{ s.email }}</span>
+        <div class="student-tags">
+          <span class="tag">{{ s.department?.name }}</span>
+          <span class="tag">{{ s.level }}L</span>
+        </div>
+      </div>
+
+      <button class="delete-btn" (click)="deleteStudent(s._id, $event)">Delete</button>
+    </a>
+  </div>
+
+  <ng-template #noStudents>
+    <p class="empty-state">No students found.</p>
+  </ng-template>
 </div>

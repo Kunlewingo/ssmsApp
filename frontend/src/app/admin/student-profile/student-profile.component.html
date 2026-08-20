@@ -1,0 +1,57 @@
+<div class="profile-container" *ngIf="student">
+
+  <a routerLink="/view-student" class="back-link">← Back to Students</a>
+
+  <div class="feedback error" *ngIf="loadError">❌ {{ loadError }}</div>
+
+  <div class="profile-header">
+    <div class="avatar">{{ student.name.charAt(0) }}</div>
+    <div class="profile-info">
+      <h2>{{ student.name }}</h2>
+      <p class="email">{{ student.email }}</p>
+      <div class="tags">
+        <span class="tag">{{ student.department?.name }}</span>
+        <span class="tag">{{ student.level }}L</span>
+        <span class="tag">{{ student.currentSession }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="gpa-strip">
+    <div class="gpa-box">
+      <span class="gpa-value">{{ sessionCGPA ?? '—' }}</span>
+      <span class="gpa-caption">Session CGPA</span>
+    </div>
+    <div class="gpa-box">
+      <span class="gpa-value">{{ cumulativeCGPA ?? '—' }}</span>
+      <span class="gpa-caption">Cumulative CGPA</span>
+    </div>
+    <div class="gpa-box">
+      <span class="gpa-value">{{ student.phone }}</span>
+      <span class="gpa-caption">Phone</span>
+    </div>
+  </div>
+
+  <h3>Registration History</h3>
+  <div class="reg-list" *ngIf="registrations.length; else noRegs">
+    <div class="reg-card" *ngFor="let r of registrations">
+      <div class="reg-header">
+        <span class="reg-session">{{ r.session }} — {{ r.semester === 'first' ? 'First' : 'Second' }} Semester</span>
+        <span class="reg-units">{{ r.totalUnits }} units</span>
+      </div>
+      <div class="reg-courses">
+        <span class="course-chip" *ngFor="let c of r.courses">
+          {{ c.course?.courseCode }}
+          <span class="chip-type" [class.carryover]="c.type === 'carryover'">({{ c.type }})</span>
+        </span>
+      </div>
+    </div>
+  </div>
+  <ng-template #noRegs>
+    <p class="empty-state">No course registrations yet.</p>
+  </ng-template>
+
+</div>
+
+<div *ngIf="loading && !student" class="loading-state">Loading student profile...</div>
+<div *ngIf="loadError && !student" class="feedback error profile-load-error">❌ {{ loadError }}</div>

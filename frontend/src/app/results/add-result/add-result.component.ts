@@ -2,172 +2,106 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { StudentService } from '../../services/student.service';
+import { CourseService } from '../../services/course.service';
+import { ResultService } from '../../services/result.service';
 
 @Component({
   selector: 'app-add-result',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './add-result.component.html',
   styleUrls: ['./add-result.component.css']
 })
 export class AddResultsComponent implements OnInit {
 
   students: any[] = [];
+  courses: any[] = [];
 
-  selectedStudentId: number | null = null;
+  selectedStudentId: string | null = null;
+  selectedStudent: any = null;
 
   result = {
-    studentId: 0,
-    studentName: '',
-    faculty: '',
+    student: '',
     course: '',
+    session: '',
+    level: null as number | null,
+    semester: '' as 'first' | 'second' | '',
     score: 0,
-    grade: ''
+    units: 0
   };
 
+  gradePreview = '';
+
+  constructor(
+    private studentService: StudentService,
+    private courseService: CourseService,
+    private resultService: ResultService
+  ) {}
+
   ngOnInit(): void {
-
-    this.loadStudents();
-
-  }
-
-  loadStudents(): void {
-
-    const storedStudents = localStorage.getItem('students');
-
-    this.students = storedStudents
-      ? JSON.parse(storedStudents)
-      : [];
-
-    console.log('Students Loaded:', this.students);
-
+    this.studentService.getStudents().subscribe(data => this.students = data);
   }
 
   onStudentChange(): void {
+    this.selectedStudent = this.students.find(s => s._id === this.selectedStudentId) || null;
+    this.courses = [];
+    this.result.course = '';
+    this.result.semester = '';
 
-    if (this.selectedStudentId === null) {
-
-      this.result = {
-        studentId: 0,
-        studentName: '',
-        faculty: '',
-        course: '',
-        score: 0,
-        grade: ''
-      };
-
-      return;
-
+    if (this.selectedStudent) {
+      this.result.student = this.selectedStudent._id;
+      this.result.level = this.selectedStudent.level;
+      this.result.session = this.selectedStudent.currentSession;
     }
-
-    const student = this.students.find(
-      student => Number(student.id) === Number(this.selectedStudentId)
-    );
-
-    console.log('Selected Student:', student);
-
-    if (student) {
-
-      this.result.studentId = student.id;
-      this.result.studentName = student.name;
-      this.result.faculty = student.faculty || '';
-      this.result.course = student.course || '';
-
-    } else {
-
-      this.result.studentId = 0;
-      this.result.studentName = '';
-      this.result.faculty = '';
-      this.result.course = '';
-
-    }
-
   }
 
-  calculateGrade(): void {
+  onSemesterChange(): void {
+    this.courses = [];
+    this.result.course = '';
+    if (!this.selectedStudent || !this.result.level || !this.result.semester) return;
 
+    const departmentId = this.selectedStudent.department?._id || this.selectedStudent.department;
+    this.courseService.getCoursesByDepartment(departmentId, this.result.level, this.result.semester)
+      .subscribe(data => this.courses = data);
+  }
+
+  onCourseChange(): void {
+    const course = this.courses.find(c => c._id === this.result.course);
+    this.result.units = course?.units || 0;
+  }
+
+  calculateGradePreview(): void {
     const score = Number(this.result.score);
-
-    if (score >= 80) {
-
-      this.result.grade = 'A';
-
-    } else if (score >= 70) {
-
-      this.result.grade = 'B';
-
-    } else if (score >= 60) {
-
-      this.result.grade = 'C';
-
-    } else if (score >= 50) {
-
-      this.result.grade = 'D';
-
-    } else {
-
-      this.result.grade = 'F';
-
-    }
-
+    if (score >= 70) this.gradePreview = 'A';
+    else if (score >= 60) this.gradePreview = 'B';
+    else if (score >= 50) this.gradePreview = 'C';
+    else if (score >= 45) this.gradePreview = 'D';
+    else if (score >= 40) this.gradePreview = 'E';
+    else this.gradePreview = 'F';
   }
 
   addResult(): void {
-
-    if (
-      !this.result.studentId ||
-      this.result.score < 0 ||
-      this.result.score > 100
-    ) {
-
+    if (!this.result.student || !this.result.course || !this.result.semester ||
+        this.result.score < 0 || this.result.score > 100) {
       alert('Please complete all required fields.');
-
       return;
-
     }
 
-    this.calculateGrade();
-
-    const results = JSON.parse(
-      localStorage.getItem('results') || '[]'
-    );
-
-    results.push({
-
-      ...this.result
-
+    this.resultService.addResult(this.result).subscribe({
+      next: () => {
+        alert('Result added successfully.');
+        this.resetForm();
+      },
+      error: (err) => alert(err.error?.message || 'Failed to add result.')
     });
-
-    localStorage.setItem(
-      'results',
-      JSON.stringify(results)
-    );
-
-    alert('Result Added Successfully.');
-
-    this.resetForm();
-
   }
 
   resetForm(): void {
-
     this.selectedStudentId = null;
-
-    this.result = {
-
-      studentId: 0,
-      studentName: '',
-      faculty: '',
-      course: '',
-      score: 0,
-      grade: ''
-
-    };
-
+    this.selectedStudent = null;
+    this.courses = [];
+    this.gradePreview = '';
+    this.result = { student: '', course: '', session: '', level: null, semester: '', score: 0, units: 0 };
   }
-
 }

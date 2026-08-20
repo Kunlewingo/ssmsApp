@@ -1,15 +1,5 @@
-.results-container {
-  padding: 20px;
-  max-width: 500px;
-}
+@import '../../shared/shared-controls.css';
 
-input {
-  width: 100%;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-button {
-  padding: 10px 20px;
-  cursor: pointer;
-}
+.add-result-container { max-width: 640px; padding: 2.5rem; font-family: system-ui, sans-serif; }
+.student-info { margin-bottom: 1rem; }
+.grade-preview { margin-bottom: 1rem; font-weight: 600; }

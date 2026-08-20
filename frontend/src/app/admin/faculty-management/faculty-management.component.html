@@ -1,0 +1,25 @@
+<div class="management-container">
+  <h2>Manage Faculties</h2>
+
+  <div class="add-form">
+    <input
+      type="text"
+      [(ngModel)]="newFacultyName"
+      placeholder="e.g. Engineering"
+      (keyup.enter)="addFaculty()">
+    <button class="btn-primary" [disabled]="submitting || !newFacultyName.trim()" (click)="addFaculty()">
+      {{ submitting ? 'Adding...' : 'Add Faculty' }}
+    </button>
+  </div>
+
+  <div class="feedback error" *ngIf="error">{{ error }}</div>
+
+  <div class="faculty-grid">
+    <div class="faculty-card" *ngFor="let f of faculties">
+      <span class="faculty-icon">🏛️</span>
+      <span class="faculty-name">{{ f.name }}</span>
+    </div>
+  </div>
+
+  <p class="empty-state" *ngIf="!faculties.length">No faculties added yet.</p>
+</div>

@@ -1,65 +1,38 @@
-<div class="layout">
+<div class="view-result-container">
+  <h2>Student Results</h2>
 
-  <!-- SIDEBAR -->
+  <div class="feedback error" *ngIf="loadError">❌ {{ loadError }}</div>
 
-  <div class="sidebar">
+  <table class="results-table" *ngIf="results.length; else noResults">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Course</th>
+        <th>Session</th>
+        <th>Level</th>
+        <th>Semester</th>
+        <th>Score</th>
+        <th>Grade</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of results">
+        <td>{{ r.student?.name }}</td>
+        <td>{{ r.course?.courseCode }} — {{ r.course?.courseName }}</td>
+        <td>{{ r.session }}</td>
+        <td>{{ r.level }}L</td>
+        <td>{{ r.semester === 'first' ? 'First' : 'Second' }}</td>
+        <td>{{ r.score }}</td>
+        <td><span class="grade-badge">{{ r.grade }}</span></td>
+        <td>
+          <button class="delete-btn" (click)="deleteResult(r._id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-    <h2>SSMS PANEL</h2>
-
-    <a routerLink="/dashboard">Dashboard</a>
-
-    <a routerLink="/add-result">Add Result</a>
-
-  </div>
-
-  <!-- MAIN CONTENT -->
-
-  <div class="main-content">
-
-    <h1 class="page-title">View Results</h1>
-
-    <div class="table-container">
-
-      <table>
-
-        <tr>
-          <th>#</th>
-          <th>Student</th>
-          <th>Course</th>
-          <th>Score</th>
-          <th>Grade</th>
-          <th>Action</th>
-        </tr>
-
-        <tr *ngFor="let result of results; let i = index">
-
-          <td>{{ i + 1 }}</td>
-
-          <td>{{ result.studentName }}</td>
-
-          <td>{{ result.course }}</td>
-
-          <td>{{ result.score }}</td>
-
-          <td>{{ result.grade }}</td>
-
-          <td>
-
-            <button
-              class="btn btn-danger"
-              (click)="deleteResult(i)"
-            >
-              Delete
-            </button>
-
-          </td>
-
-        </tr>
-
-      </table>
-
-    </div>
-
-  </div>
-
+  <ng-template #noResults>
+    <p class="empty-state">No results recorded yet.</p>
+  </ng-template>
 </div>

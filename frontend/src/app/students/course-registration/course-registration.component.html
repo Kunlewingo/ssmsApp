@@ -1,0 +1,118 @@
+<div class="registration-container">
+  <h2>Course Registration</h2>
+
+  <div *ngIf="loadingStudent">Loading your profile...</div>
+  <div *ngIf="studentLoadError" class="feedback error">{{ studentLoadError }}</div>
+
+  <ng-container *ngIf="!loadingStudent && !studentLoadError">
+
+    <!-- Step 1: Faculty & Department -->
+    <div class="step">
+      <label>Faculty</label>
+      <select [(ngModel)]="selectedFacultyId" (ngModelChange)="onFacultyChange()">
+        <option value="">-- Select Faculty --</option>
+        <option *ngFor="let f of faculties" [value]="f._id">{{ f.name }}</option>
+      </select>
+    </div>
+
+    <div class="step" *ngIf="selectedFacultyId">
+      <label>Department</label>
+      <select [(ngModel)]="selectedDepartmentId" (ngModelChange)="onDepartmentChange()">
+        <option value="">-- Select Department --</option>
+        <option *ngFor="let d of departments" [value]="d._id">{{ d.name }}</option>
+      </select>
+    </div>
+
+    <!-- Step 2: Level -->
+    <div class="step" *ngIf="selectedDepartmentId">
+      <label>Level</label>
+      <div class="button-group">
+        <button
+          *ngFor="let lvl of availableLevels"
+          type="button"
+          class="pill-btn"
+          [class.active]="level === lvl"
+          (click)="selectLevel(lvl)">
+          {{ lvl }}L
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3: Semester -->
+    <div class="step" *ngIf="level">
+      <label>Semester</label>
+      <div class="button-group">
+        <button
+          *ngFor="let sem of semesters"
+          type="button"
+          class="pill-btn semester-btn"
+          [class.active]="semester === sem"
+          (click)="selectSemester(sem)">
+          {{ sem === 'first' ? 'First Semester' : 'Second Semester' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4: Session -->
+    <div class="step" *ngIf="semester">
+      <label>Academic Session</label>
+      <input type="text" [(ngModel)]="session" placeholder="e.g. 2025/2026" class="session-input" />
+    </div>
+
+    <!-- Courses -->
+    <div class="courses-section" *ngIf="readyForCourses">
+
+      <h3>Compulsory Courses</h3>
+      <div class="course-grid">
+        <div class="course-card locked" *ngFor="let c of compulsoryCourses">
+          <span class="code">{{ c.courseCode }}</span>
+          <span class="name">{{ c.courseName }}</span>
+          <span class="units">{{ c.units }} units</span>
+          <span class="tag">Required</span>
+        </div>
+      </div>
+
+      <h3>Elective Courses <span class="hint">(choose {{ minElectives }}–{{ maxElectives }})</span></h3>
+      <div class="course-grid">
+        <button
+          type="button"
+          class="course-card selectable"
+          *ngFor="let c of electiveCourses"
+          [class.selected]="selectedElectives.includes(c._id!)"
+          [disabled]="isElectiveDisabled(c)"
+          (click)="toggleElective(c._id!)">
+          <span class="code">{{ c.courseCode }}</span>
+          <span class="name">{{ c.courseName }}</span>
+          <span class="units">{{ c.units }} units</span>
+        </button>
+      </div>
+
+      <!-- Unit progress -->
+      <div class="unit-tracker">
+        <div class="unit-bar">
+          <div class="unit-fill" [style.width.%]="unitProgressPercent"
+               [class.over]="totalUnits > maxUnits"></div>
+        </div>
+        <div class="unit-label">
+          {{ totalUnits }} / {{ maxUnits }} units
+          <span *ngIf="totalUnits > maxUnits" class="warning">⚠ Over the limit</span>
+        </div>
+      </div>
+
+      <!-- Feedback messages -->
+      <div class="feedback success" *ngIf="submitSuccess">
+        ✅ Registration submitted successfully!
+      </div>
+      <div class="feedback warning-box" *ngIf="submitWarning">
+        ⚠ {{ submitWarning }}
+      </div>
+      <div class="feedback error" *ngIf="submitError">
+        ❌ {{ submitError }}
+      </div>
+
+      <button class="submit-btn" [disabled]="!canSubmit" (click)="onSubmit()">
+        {{ submitting ? 'Submitting...' : 'Submit Registration' }}
+      </button>
+    </div>
+  </ng-container>
+</div>

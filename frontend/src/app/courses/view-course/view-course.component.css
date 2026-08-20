@@ -1,0 +1,37 @@
+@import '../../shared/shared-controls.css';
+
+.view-course-container { padding: 2.5rem; font-family: system-ui, sans-serif; max-width: 1000px; }
+
+.header-row {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+}
+.header-row h2 { margin: 0; }
+
+.add-link {
+  text-decoration: none; display: inline-block;
+}
+
+.filter-bar {
+  display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap;
+  margin-bottom: 1.5rem; padding: 1rem 1.2rem; background: var(--surface-card);
+  border-radius: var(--radius-md); border: 1.5px solid var(--border);
+}
+
+.filter-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.filter-group label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); }
+.filter-group select {
+  padding: 0.5rem 0.8rem; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+  background: var(--surface-card); color: var(--text-primary); min-width: 200px; font-size: 0.9rem;
+}
+.filter-group select:focus { outline: none; border-color: var(--blue); }
+.filter-group select option { background: var(--surface-card); color: var(--text-primary); }
+
+.edit-input {
+  width: 100%; padding: 0.4rem 0.5rem; border-radius: 6px; border: 1.5px solid var(--blue);
+  background: var(--surface-card); color: var(--text-primary); font-size: 0.85rem; box-sizing: border-box;
+}
+.edit-input:focus { outline: none; border-color: var(--purple); }
+.units-input { width: 70px; }
+
+.actions-cell { display: flex; gap: 0.4rem; white-space: nowrap; }
+.btn-small { padding: 0.35rem 0.8rem; font-size: 0.8rem; }

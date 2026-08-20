@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ResultService {
-
-  private api = 'http://localhost:5000/api/results';
+  private baseUrl = 'http://localhost:5000/api/results';
 
   constructor(private http: HttpClient) {}
 
-  addResult(data: any) {
-    return this.http.post(this.api, data);
+  addResult(payload: any): Observable<any> {
+    return this.http.post(this.baseUrl, payload);
   }
 
-  getResults() {
-    return this.http.get(this.api);
+  getResults(params: any = {}): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl, { params });
   }
 
-  getResultByStudent(studentId: string) {
-    return this.http.get(`${this.api}/student/${studentId}`);
+  deleteResult(id: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 }

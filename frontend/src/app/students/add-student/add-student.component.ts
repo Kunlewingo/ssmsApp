@@ -1,224 +1,165 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { FacultyService } from '../../services/faculty.service';
+import { DepartmentService } from '../../services/department.service';
+import { StudentService } from '../../services/student.service';
+import { Faculty, Department } from '../../models/course.model';
+import { toUserMessage } from '../../shared/error-message.util';
 
 @Component({
   selector: 'app-add-student',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './add-student.component.html',
   styleUrls: ['./add-student.component.css']
 })
-export class AddStudentComponent {
+export class AddStudentComponent implements OnInit {
 
   student = {
-    id: 0,
     name: '',
     email: '',
     phone: '',
-    faculty: '',
-    course: '',
+    faculty: '',       // used locally to filter departments only; not sent to backend
+    department: '',
+    level: null as number | null,
+    currentSession: '',
     dateRegistered: ''
   };
 
-  faculties: { [key: string]: string[] } = {
+  faculties: Faculty[] = [];
+  departments: Department[] = [];
+  loadError = '';
 
-    Engineering: [
-      'Computer Engineering',
-      'Civil Engineering',
-      'Electrical Engineering',
-      'Mechanical Engineering',
-      'Chemical Engineering'
-    ],
+  // Shown once, right after a student is created, so the admin can hand it over.
+  generatedPassword = '';
+  createdStudentName = '';
+  copyConfirmation = false;
 
-    Science: [
-      'Computer Science',
-      'Mathematics',
-      'Physics',
-      'Chemistry',
-      'Biochemistry',
-      'Microbiology'
-    ],
+  constructor(
+    private router: Router,
+    private facultyService: FacultyService,
+    private departmentService: DepartmentService,
+    private studentService: StudentService
+  ) {}
 
-    'Management Sciences': [
-      'Accounting',
-      'Business Administration',
-      'Marketing',
-      'Banking and Finance',
-      'Insurance'
-    ],
+  ngOnInit(): void {
+    this.facultyService.getFaculties().subscribe({
+      next: (data) => this.faculties = data,
+      error: (err) => this.loadError = toUserMessage(err, 'Could not load faculties. Please refresh.')
+    });
+    this.student.dateRegistered = new Date().toISOString().split('T')[0];
+    this.student.currentSession = this.getDefaultSession();
+  }
 
-    'Social Sciences': [
-      'Economics',
-      'Political Science',
-      'Psychology',
-      'Sociology',
-      'Mass Communication'
-    ],
-
-    Arts: [
-      'English',
-      'History',
-      'Linguistics',
-      'Theatre Arts'
-    ],
-
-    Education: [
-      'Education Biology',
-      'Education Chemistry',
-      'Education Mathematics',
-      'Guidance and Counselling'
-    ],
-
-    Law: [
-      'Law'
-    ],
-
-    Medicine: [
-      'Medicine and Surgery',
-      'Nursing',
-      'Pharmacy',
-      'Medical Laboratory Science'
-    ]
-
-  };
-
-  courses: string[] = [];
-
-  constructor(private router: Router) {}
-
-  getFacultyNames(): string[] {
-    return Object.keys(this.faculties);
+  getDefaultSession(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const startYear = now.getMonth() >= 8 ? year : year - 1;
+    return `${startYear}/${startYear + 1}`;
   }
 
   onFacultyChange(): void {
+    this.departments = [];
+    this.student.department = '';
+    this.student.level = null;
+    if (this.student.faculty) {
+      this.departmentService.getByFaculty(this.student.faculty).subscribe({
+        next: (data) => this.departments = data,
+        error: (err) => this.loadError = toUserMessage(err, 'Could not load departments. Please refresh.')
+      });
+    }
+  }
 
-    this.courses =
-      this.faculties[this.student.faculty] || [];
+  get availableLevels(): number[] {
+    const selectedDept = this.departments.find(d => d._id === this.student.department);
+    const base = [100, 200, 300, 400];
+    if (selectedDept?.durationYears === 5) base.push(500);
+    return base;
+  }
 
-    this.student.course = '';
-
+  selectLevel(lvl: number): void {
+    this.student.level = lvl;
   }
 
   lettersOnly(event: any): void {
-
-    const value =
-      event.target.value.replace(/[^a-zA-Z ]/g, '');
-
+    const value = event.target.value.replace(/[^a-zA-Z ]/g, '');
     event.target.value = value;
-
     this.student.name = value;
-
   }
 
   numbersOnly(event: any): void {
-
-    const value =
-      event.target.value.replace(/[^0-9]/g, '');
-
+    const value = event.target.value.replace(/[^0-9]/g, '');
     event.target.value = value;
-
     this.student.phone = value;
-
   }
 
   validateEmail(email: string): boolean {
-
-    const pattern =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return pattern.test(email);
-
   }
 
   addStudent(): void {
-
     if (
       !this.student.name.trim() ||
       !this.student.email.trim() ||
       !this.student.phone.trim() ||
       !this.student.faculty ||
-      !this.student.course ||
-      !this.student.dateRegistered
+      !this.student.department ||
+      !this.student.level ||
+      !this.student.currentSession
     ) {
-
       alert('Please complete all required fields.');
-
       return;
-
     }
 
     if (!this.validateEmail(this.student.email)) {
-
       alert('Please enter a valid email address.');
-
       return;
-
     }
 
     if (this.student.phone.length !== 11) {
-
       alert('Phone number must contain exactly 11 digits.');
-
       return;
-
     }
 
-    let students = JSON.parse(
-      localStorage.getItem('students') || '[]'
-    );
+    // faculty was only used locally to filter departments — don't send it
+    const { faculty, ...payload } = this.student;
 
-    this.student.id = Date.now();
-
-    students.push({
-
-      ...this.student
-
+    this.studentService.addStudent(payload).subscribe({
+      next: (res) => {
+        this.createdStudentName = res.name;
+        this.generatedPassword = res.temporaryPassword;
+        this.copyConfirmation = false;
+        this.resetForm();
+      },
+      error: (err) => {
+        alert(toUserMessage(err, 'Failed to add student.'));
+      }
     });
+  }
 
-    localStorage.setItem(
+  copyGeneratedPassword(): void {
+    navigator.clipboard.writeText(this.generatedPassword).then(() => {
+      this.copyConfirmation = true;
+      setTimeout(() => this.copyConfirmation = false, 2000);
+    });
+  }
 
-      'students',
-
-      JSON.stringify(students)
-
-    );
-
-    alert('Student added successfully.');
-
-    this.resetForm();
-
+  dismissGeneratedPassword(): void {
+    this.generatedPassword = '';
+    this.createdStudentName = '';
     this.router.navigate(['/view-student']);
-
   }
 
   resetForm(): void {
-
     this.student = {
-
-      id: 0,
-
-      name: '',
-
-      email: '',
-
-      phone: '',
-
-      faculty: '',
-
-      course: '',
-
-      dateRegistered: ''
-
+      name: '', email: '', phone: '',
+      faculty: '', department: '', level: null,
+      currentSession: this.getDefaultSession(),
+      dateRegistered: new Date().toISOString().split('T')[0]
     };
-
-    this.courses = [];
-
+    this.departments = [];
   }
-
 }
